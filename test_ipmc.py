@@ -9,7 +9,7 @@ class IPMC:
     def getFirmware(self):
         return self.firmware_commit
 
-print(subprocess.run(["/home/ablaizot/test_ipmc.sh"],shell=True))
+#print(subprocess.run(["/home/ablaizot/test_ipmc.sh"],shell=True))
 
 def extract_ipmc(file_contents):
     lines = file_contents.split("\n")
