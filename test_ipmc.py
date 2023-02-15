@@ -1,4 +1,7 @@
+import socket
 import subprocess
+import time
+import ipmc_scripts
 
 class IPMC:
     def __init__(self, ip, ipmb_0_address, firmware_commit):
@@ -45,6 +48,61 @@ def check_firmware(file_contents,IPMC):
     return check
 
 ipmc = extract_ipmc(read_logs("logs_ipmc"))
+
+def main():
+    args = ipmc_scripts.parse_cli()
+
+    board = f'SM{args.board_number}'
+
+    # Check board serial
+    if board not in ipmc_scripts.SM_TO_IPMC:
+        raise ValueError(f'IPMC cannot be found for Apollo: {board}')
+
+      # IP address of the IPMC
+    HOST = ipmc_scripts.SM_TO_IPMC[board]
+
+    # Retrieve and validate the configuration
+    config = ipmc_scripts.read_config(args.config_path)
+    ipmc_scripts.validate_config(config)
+    
+    commands = ipmc_scripts.get_commands(config)
+
+        # Timeout value (s) for socket connection
+    timeout = 5
+
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        # Make the connection
+        s.connect((HOST, ipmc_scripts.PORT))
+        s.settimeout(timeout)
+        
+        print(f'\n> Connection established to: {HOST}:{ipmc_scripts.PORT}')
+        print(f'> Timeout set to: {timeout} s')
+        print(f'> Executing update commands...\n')
+
+        # Execute the commands and read back data
+        for command in commands:
+            print(f'>> {command}', end='   ')
+            try:
+                output = ipmc_scripts.write_command_and_read_output(s, command)
+                print('-> OK')
+            except socket.timeout:
+                print('-> Command timed out, skipping.')
+                continue
+            
+            time.sleep(0.5)
+        
+        # Do a final read of the EEPROM before exiting
+        print('\nCommands are done. EEPROM reads as:')
+        out = ipmc_scripts.write_command_and_read_output(s, "eepromrd\r\n")
+        print(out)
+
+        # Validate the command output
+        ipmc_scripts.validate_command_output(output, config)
+    print(out)
+    print(output)
+    print(config)
+    
+
 
 print("IP:", ipmc.ip)
 print("IPMB-0 Address:", ipmc.ipmb_0_address)
