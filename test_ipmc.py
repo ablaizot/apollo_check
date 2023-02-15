@@ -36,7 +36,7 @@ def main():
 
         # Execute the commands and read back data
         
-        print(f'>> {command}', end='   ')
+        
         try:
             output = ipmc_scripts.write_command_and_read_output(s, "info\r\n")
             print('-> OK')
