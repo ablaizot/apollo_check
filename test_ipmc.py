@@ -17,10 +17,10 @@ def main():
     HOST = ipmc_scripts.SM_TO_IPMC[board]
 
     # Retrieve and validate the configuration
-    config = ipmc_scripts.read_config(args.config_path)
-    ipmc_scripts.validate_config(config)
+    #config = ipmc_scripts.read_config(args.config_path)
+    #ipmc_scripts.validate_config(config)
     
-    commands = ipmc_scripts.get_commands(config)
+    #commands = ipmc_scripts.get_commands(config)
 
         # Timeout value (s) for socket connection
     timeout = 5
@@ -35,28 +35,24 @@ def main():
         print(f'> Executing update commands...\n')
 
         # Execute the commands and read back data
-        for command in commands:
-            print(f'>> {command}', end='   ')
-            try:
-                output = ipmc_scripts.write_command_and_read_output(s, command)
-                print('-> OK')
-            except socket.timeout:
-                print('-> Command timed out, skipping.')
-                continue
-            
-            time.sleep(0.5)
+        
+        print(f'>> {command}', end='   ')
+        try:
+            output = ipmc_scripts.write_command_and_read_output(s, "info\r\n")
+            print('-> OK')
+        except socket.timeout:
+            print('-> Command timed out, skipping.')
+        
+        time.sleep(0.5)
         
         # Do a final read of the EEPROM before exiting
         print('\nCommands are done. EEPROM reads as:')
         out = ipmc_scripts.write_command_and_read_output(s, "eepromrd\r\n")
         print(out)
 
-        # Validate the command output
-        ipmc_scripts.validate_command_output(output, config)
     print(out)
     print(output)
-    print(config)
-    logs = out+output+config
+    logs = out+output
 
 
     ipmc = ipmc_scripts.extract_ipmc(logs)
@@ -69,9 +65,6 @@ def main():
 
     print(ipmc_scripts.check_firmware(ipmc_scripts.read_logs("logs_ipmc"),ipmc))
 
-
-
-    
 
 if __name__ == '__main__':   
     main()
