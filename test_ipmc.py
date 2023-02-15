@@ -101,8 +101,9 @@ def main():
     print(out)
     print(output)
     print(config)
-    
 
+if __name__ == '__main__':   
+    main()
 
 print("IP:", ipmc.ip)
 print("IPMB-0 Address:", ipmc.ipmb_0_address)
