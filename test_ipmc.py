@@ -8,14 +8,21 @@ def main():
     args = ipmc_scripts.parse_cli()
 
     board = f'SM{args.board_number}'
+    ipmc_ip = {args.ipmc_ip}
 
     # Check board serial
-    if board not in ipmc_scripts.SM_TO_IPMC:
-        raise ValueError(f'IPMC cannot be found for Apollo: {board}')
+    if board != None:
+        if board not in ipmc_scripts.SM_TO_IPMC:
+            raise ValueError(f'IPMC cannot be found for Apollo: {board}')
 
-      # IP address of the IPMC
-    HOST = ipmc_scripts.SM_TO_IPMC[board]
-
+        # IP address of the IPMC
+        HOST = ipmc_scripts.SM_TO_IPMC[board]
+    elif ipmc_ip != None:
+        if ipmc_ip not in ipmc_scripts.IPMC_TO_SM:
+            raise ValueError(f'IPMC cannot be found for IP{ipmc_ip}')
+            HOST = ipmc_ip
+    else:
+        raise ValueError(f'No Argument')
     # Retrieve and validate the configuration
     #config = ipmc_scripts.read_config(args.config_path)
     #ipmc_scripts.validate_config(config)
@@ -62,6 +69,8 @@ def main():
 
     print(subprocess.run(["ipmitool -H 192.168.10.172 -P \"\" -t " + ipmc.ipmb_0_address + " fru >> logs_ipmc"],shell=True))
     print(subprocess.run(["ipmitool -H 192.168.10.172 -P \"\" -t " + ipmc.ipmb_0_address + " sensor >> logs_ipmc"],shell=True))
+
+
 
     print(ipmc_scripts.check_firmware(ipmc_scripts.read_logs("logs_ipmc"),ipmc))
 

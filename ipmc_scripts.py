@@ -6,6 +6,7 @@ import time
 import yaml
 import socket
 import argparse
+import xml
 
 # Check Python version, need at least 3.6
 valid_python = sys.version_info.major >= 3 and sys.version_info.minor >= 6 
@@ -23,6 +24,18 @@ SM_TO_IPMC = {
     'SM209' : '192.168.22.37',
     'SM211' : '192.168.22.42',
     'SM212' : '192.168.22.3',
+}
+
+IPMC_TO_SM = {
+    '192.168.21.5':'SM203',
+    '192.168.22.34':'SM204',
+    '192.168.22.32':'SM207',
+    '192.168.22.41':'SM208',
+    '192.168.22.37':'SM209',
+    '192.168.22.42':'SM211',
+    '192.168.22.3':'SM212',
+
+
 }
 
 # A mapping of configuration fields -> commands to set them
@@ -43,10 +56,22 @@ CONFIG_TO_COMMANDS = {
     },
 }
 
+#define IPMC object with fields gathered from telnetting to it and ipmi tool
+class IPMC:
+    def __init__(self, ip, hw, ipmb_0_address, firmware_commit):
+        self.ip = ip
+        self.hw = hw
+        self.ipmb_0_address = ipmb_0_address
+        self.firmware_commit = firmware_commit
+
+    def getFirmware(self):
+        return self.firmware_commit
+
 def parse_cli():
     parser = argparse.ArgumentParser()
-    parser.add_argument('board_number', type=int, help='The serial number of the Apollo SM.')
+    parser.add_argument('board_number', type=int, help='The serial number of the Apollo SM.',nargs='?')
     parser.add_argument('-c', '--config-path', default='config/ipmc_config.yaml', help='Path to the IPMC config file.')
+    parser.add_argument('ipmc_ip',type=str,help='IP address of IPMC',nargs='?')
     args = parser.parse_args()
     return args
 
@@ -166,19 +191,13 @@ def validate_command_output(output, config):
     print(f"   -> OK")
     return True
 
-class IPMC:
-    def __init__(self, ip, ipmb_0_address, firmware_commit):
-        self.ip = ip
-        self.ipmb_0_address = ipmb_0_address
-        self.firmware_commit = firmware_commit
 
-    def getFirmware(self):
-        return self.firmware_commit
 
 #print(subprocess.run(["/home/ablaizot/test_ipmc.sh"],shell=True))
 
 def extract_ipmc(file_contents):
     lines = file_contents.split("\n")
+    hw = None
     ip = None
     address = None
     firmware = None
@@ -189,7 +208,9 @@ def extract_ipmc(file_contents):
             address = line.split("IPMB-0 Addr:")[1].strip()
         elif "Firmware commit:" in line:
             firmware = line.split("Firmware commit:")[1].strip()
-    return IPMC(ip, address, firmware)
+        elif "hw           =" in line:
+            hw = line.split("hw           =")[1].strip()
+    return IPMC(ip, hw, address, firmware)
 
 def read_logs(file_path):
     with open(file_path) as f:
