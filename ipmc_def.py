@@ -26,7 +26,7 @@ SM_TO_IPMC = {
     'SM212' : '192.168.22.3',
 }
 
-IPMC_TO_SM = {
+IPMC_TO_SM = tuple({
     '192.168.21.5':'SM203',
     '192.168.22.34':'SM204',
     '192.168.22.32':'SM207',
@@ -36,7 +36,7 @@ IPMC_TO_SM = {
     '192.168.22.3':'SM212',
 
 
-}
+})
 
 # A mapping of configuration fields -> commands to set them
 CONFIG_TO_COMMANDS = {
