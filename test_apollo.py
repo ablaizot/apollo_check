@@ -1,6 +1,6 @@
 
 class apollo:
-    def __init__(self, ip, name, ipmc,):
+    def __init__(self, ip, name, ipmc,firmware_commit):
         self.ip = ip    
         self.name = name
         self.ipmc = ipmc

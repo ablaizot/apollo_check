@@ -1,24 +1,24 @@
 import socket
 import subprocess
 import time
-import ipmc_scripts
+import ipmc
 
 
 def main():
-    args = ipmc_scripts.parse_cli()
+    args = ipmc.parse_cli()
 
     board = f'SM{args.board_number}'
     ipmc_ip = {args.ipmc_ip}
 
     # Check board serial
     if board != None:
-        if board not in ipmc_scripts.SM_TO_IPMC:
+        if board not in ipmc.SM_TO_IPMC:
             raise ValueError(f'IPMC cannot be found for Apollo: {board}')
 
         # IP address of the IPMC
-        HOST = ipmc_scripts.SM_TO_IPMC[board]
+        HOST = ipmc.SM_TO_IPMC[board]
     elif ipmc_ip != None:
-        if ipmc_ip not in ipmc_scripts.IPMC_TO_SM:
+        if ipmc_ip not in ipmc.IPMC_TO_SM:
             raise ValueError(f'IPMC cannot be found for IP{ipmc_ip}')
             HOST = ipmc_ip
     else:
@@ -34,10 +34,10 @@ def main():
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         # Make the connection
-        s.connect((HOST, ipmc_scripts.PORT))
+        s.connect((HOST, ipmc.PORT))
         s.settimeout(timeout)
         
-        print(f'\n> Connection established to: {HOST}:{ipmc_scripts.PORT}')
+        print(f'\n> Connection established to: {HOST}:{ipmc.PORT}')
         print(f'> Timeout set to: {timeout} s')
         print(f'> Executing update commands...\n')
 
@@ -45,7 +45,7 @@ def main():
         
         
         try:
-            output = ipmc_scripts.write_command_and_read_output(s, "info\r\n")
+            output = ipmc.write_command_and_read_output(s, "info\r\n")
             print('-> OK')
         except socket.timeout:
             print('-> Command timed out, skipping.')
@@ -54,7 +54,7 @@ def main():
         
         # Do a final read of the EEPROM before exiting
         print('\nCommands are done. EEPROM reads as:')
-        out = ipmc_scripts.write_command_and_read_output(s, "eepromrd\r\n")
+        out = ipmc.write_command_and_read_output(s, "eepromrd\r\n")
         print(out)
 
     print(out)
@@ -62,7 +62,7 @@ def main():
     logs = out+output
 
 
-    ipmc = ipmc_scripts.extract_ipmc(logs)
+    ipmc = ipmc.extract_ipmc(logs)
     print("IP:", ipmc.ip)
     print("IPMB-0 Address:", ipmc.ipmb_0_address)
     print("Firmware Commit:", ipmc.firmware_commit)
@@ -72,7 +72,7 @@ def main():
 
 
 
-    print(ipmc_scripts.check_firmware(ipmc_scripts.read_logs("logs_ipmc"),ipmc))
+    print(ipmc.check_firmware(ipmc.read_logs("logs_ipmc"),ipmc))
 
 
 if __name__ == '__main__':   
