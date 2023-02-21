@@ -72,8 +72,10 @@ def parse_cli():
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-b','--board_number', type=int, help='The serial number of the Apollo SM.',nargs='?')
-    group.add_argument('-c', '--config-path', default='config/ipmc_config.yaml', help='Path to the IPMC config file.')
-    parser.add_argument('-ip','--ipmc_ip',type=str,help='IP address of IPMC',nargs='?')
+    group.add_argument('-ip','--ipmc_ip',type=str,help='IP address of IPMC',nargs='?')
+
+    #parser.add_argument('-c', '--config-path', default='config/ipmc_config.yaml', help='Path to the IPMC config file.')
+
     args = parser.parse_args()
     return args
 
