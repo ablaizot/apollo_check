@@ -20,10 +20,11 @@ def main():
     # Check board serial
     elif ipmc_ip != None:
         if ipmc_ip not in ipmc_def.IPMC_TO_SM:
-            raise ValueError(f'IPMC cannot be found for IP{ipmc_ip}')
-            HOST = ipmc_ip
+            raise ValueError(f'IPMC cannot be found for IP: {ipmc_ip}')
+            
+        HOST = ipmc_ip
     else:
-        raise ValueError(f'No Argument')
+        raise ValueError('No Argument')
     # Retrieve and validate the configuration
     #config = ipmc_scripts.read_config(args.config_path)
     #ipmc_scripts.validate_config(config)
