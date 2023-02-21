@@ -11,7 +11,7 @@ def main():
     ipmc_ip = {args.ipmc_ip}
 
     # Check board serial
-    if board != None:
+    if board != 'SMNone' or board != None:
         if board not in ipmc_def.SM_TO_IPMC:
             raise ValueError(f'IPMC cannot be found for Apollo: {board}')
 
