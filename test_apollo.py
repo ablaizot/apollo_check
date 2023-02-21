@@ -1,10 +1,11 @@
+import socket
+import subprocess
+import time
+import ipmc_def
+import apollo_def
 
-class apollo:
-    def __init__(self, ip, name, ipmc,firmware_commit):
-        self.ip = ip    
-        self.name = name
-        self.ipmc = ipmc
-        self.firmware_commit = firmware_commit
-
-    def getFirmware(self):
-        return self.firmware_commit
+def main():
+    args = apollo_def.parse_cli()
+    
+if __name__ == '__main__':   
+    main()
