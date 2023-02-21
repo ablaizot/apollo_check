@@ -6,7 +6,7 @@ import ipmc_def
 
 def main():
     args = ipmc_def.parse_cli()
-    ipmc_ip = {args.ipmc_ip}
+    ipmc_ip = f'{args.ipmc_ip}'
 
     if args.board_number !=None:
         board = f'SM{args.board_number}'
@@ -19,10 +19,9 @@ def main():
 
     # Check board serial
     elif ipmc_ip != None:
-        #
-        #print(ipmc_def.IPMC_IP)
-        #if ipmc_ip not in ipmc_def.IPMC_IP:
-        #   raise ValueError(f'IPMC cannot be found for IP: {ipmc_ip}')
+        
+        if ipmc_ip not in ipmc_def.IPMC_IP:
+           raise ValueError(f'IPMC cannot be found for IP: {ipmc_ip}')
             
         HOST = ipmc_ip
     else:
