@@ -69,9 +69,9 @@ class IPMC:
 
 def parse_cli():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-b','board_number', type=int, help='The serial number of the Apollo SM.',nargs='?')
+    parser.add_argument('-b','--board_number', type=int, help='The serial number of the Apollo SM.',nargs='?')
     parser.add_argument('-c', '--config-path', default='config/ipmc_config.yaml', help='Path to the IPMC config file.')
-    parser.add_argument('-ip','ipmc_ip',type=str,help='IP address of IPMC',nargs='?')
+    parser.add_argument('-ip','--ipmc_ip',type=str,help='IP address of IPMC',nargs='?')
     args = parser.parse_args()
     return args
 
