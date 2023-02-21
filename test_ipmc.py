@@ -6,19 +6,18 @@ import ipmc_def
 
 def main():
     args = ipmc_def.parse_cli()
+    ipmc_ip = {args.ipmc_ip}
 
     if args.board_number !=None:
         board = f'SM{args.board_number}'
-        
-    ipmc_ip = {args.ipmc_ip}
+        if board != 'SMNone' or board != None:
+            if board not in ipmc_def.SM_TO_IPMC:
+                raise ValueError(f'IPMC cannot be found for Apollo: {board}')
+
+            # IP address of the IPMC
+            HOST = ipmc_def.SM_TO_IPMC[board]
 
     # Check board serial
-    if board != 'SMNone' or board != None:
-        if board not in ipmc_def.SM_TO_IPMC:
-            raise ValueError(f'IPMC cannot be found for Apollo: {board}')
-
-        # IP address of the IPMC
-        HOST = ipmc_def.SM_TO_IPMC[board]
     elif ipmc_ip != None:
         if ipmc_ip not in ipmc_def.IPMC_TO_SM:
             raise ValueError(f'IPMC cannot be found for IP{ipmc_ip}')
