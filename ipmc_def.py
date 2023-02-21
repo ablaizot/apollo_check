@@ -65,6 +65,9 @@ class IPMC:
     def getFirmware(self):
         return self.firmware_commit
 
+    def getipmb_0_address(self):
+        return self.ipmb_0_address
+
 def parse_cli():
     parser = argparse.ArgumentParser()
     parser.add_argument('-b','--board_number', type=int, help='The serial number of the Apollo SM.',nargs='?')
