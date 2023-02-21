@@ -19,9 +19,10 @@ def main():
 
     # Check board serial
     elif ipmc_ip != None:
-        print(ipmc_def.IPMC_IP)
-        if ipmc_ip not in ipmc_def.IPMC_IP:
-            raise ValueError(f'IPMC cannot be found for IP: {ipmc_ip}')
+        #
+        #print(ipmc_def.IPMC_IP)
+        #if ipmc_ip not in ipmc_def.IPMC_IP:
+        #   raise ValueError(f'IPMC cannot be found for IP: {ipmc_ip}')
             
         HOST = ipmc_ip
     else:
