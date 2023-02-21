@@ -7,7 +7,9 @@ import ipmc_def
 def main():
     args = ipmc_def.parse_cli()
 
-    board = f'SM{args.board_number}'
+    if args.board_number !=None:
+        board = f'SM{args.board_number}'
+        
     ipmc_ip = {args.ipmc_ip}
 
     # Check board serial
