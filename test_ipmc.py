@@ -66,8 +66,8 @@ def main():
 
     ipmc = ipmc_def.extract_ipmc(logs)
     print("IP:", ipmc.ip)
-    print("IPMB-0 Address:", ipmc_def.ipmb_0_address)
-    print("Firmware Commit:", ipmc_def.firmware_commit)
+    print("IPMB-0 Address:", ipmc.ipmb_0_address)
+    print("Firmware Commit:", ipmc.firmware_commit)
 
     print(subprocess.run(["ipmitool -H 192.168.10.172 -P \"\" -t " + ipmc.ipmb_0_address + " fru >> logs_ipmc"],shell=True))
     print(subprocess.run(["ipmitool -H 192.168.10.172 -P \"\" -t " + ipmc.ipmb_0_address + " sensor >> logs_ipmc"],shell=True))
