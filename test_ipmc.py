@@ -5,20 +5,20 @@ import ipmc_def
 
 
 def main():
-    args = ipmc.parse_cli()
+    args = ipmc_def.parse_cli()
 
     board = f'SM{args.board_number}'
     ipmc_ip = {args.ipmc_ip}
 
     # Check board serial
     if board != None:
-        if board not in ipmc.SM_TO_IPMC:
+        if board not in ipmc_def.SM_TO_IPMC:
             raise ValueError(f'IPMC cannot be found for Apollo: {board}')
 
         # IP address of the IPMC
-        HOST = ipmc.SM_TO_IPMC[board]
+        HOST = ipmc_def.SM_TO_IPMC[board]
     elif ipmc_ip != None:
-        if ipmc_ip not in ipmc.IPMC_TO_SM:
+        if ipmc_ip not in ipmc_def.IPMC_TO_SM:
             raise ValueError(f'IPMC cannot be found for IP{ipmc_ip}')
             HOST = ipmc_ip
     else:
@@ -34,10 +34,10 @@ def main():
 
     with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         # Make the connection
-        s.connect((HOST, ipmc.PORT))
+        s.connect((HOST, ipmc_def.PORT))
         s.settimeout(timeout)
         
-        print(f'\n> Connection established to: {HOST}:{ipmc.PORT}')
+        print(f'\n> Connection established to: {HOST}:{ipmc_def.PORT}')
         print(f'> Timeout set to: {timeout} s')
         print(f'> Executing update commands...\n')
 
@@ -45,7 +45,7 @@ def main():
         
         
         try:
-            output = ipmc.write_command_and_read_output(s, "info\r\n")
+            output = ipmc_def.write_command_and_read_output(s, "info\r\n")
             print('-> OK')
         except socket.timeout:
             print('-> Command timed out, skipping.')
@@ -54,7 +54,7 @@ def main():
         
         # Do a final read of the EEPROM before exiting
         print('\nCommands are done. EEPROM reads as:')
-        out = ipmc.write_command_and_read_output(s, "eepromrd\r\n")
+        out = ipmc_def.write_command_and_read_output(s, "eepromrd\r\n")
         print(out)
 
     print(out)
@@ -62,17 +62,17 @@ def main():
     logs = out+output
 
 
-    ipmc = ipmc.extract_ipmc(logs)
+    ipmc = ipmc_def.extract_ipmc(logs)
     print("IP:", ipmc.ip)
-    print("IPMB-0 Address:", ipmc.ipmb_0_address)
-    print("Firmware Commit:", ipmc.firmware_commit)
+    print("IPMB-0 Address:", ipmc_def.ipmb_0_address)
+    print("Firmware Commit:", ipmc_def.firmware_commit)
 
     print(subprocess.run(["ipmitool -H 192.168.10.172 -P \"\" -t " + ipmc.ipmb_0_address + " fru >> logs_ipmc"],shell=True))
     print(subprocess.run(["ipmitool -H 192.168.10.172 -P \"\" -t " + ipmc.ipmb_0_address + " sensor >> logs_ipmc"],shell=True))
 
 
 
-    print(ipmc.check_firmware(ipmc.read_logs("logs_ipmc"),ipmc))
+    print(ipmc_def.check_firmware(ipmc_def.read_logs("logs_ipmc"),ipmc))
 
 
 if __name__ == '__main__':   
