@@ -1,7 +1,7 @@
 import socket
 import subprocess
 import time
-import ipmc
+import ipmc_def
 
 
 def main():
