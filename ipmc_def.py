@@ -26,7 +26,7 @@ SM_TO_IPMC = {
     'SM212' : '192.168.22.3',
 }
 
-IPMC_TO_SM = tuple({
+IPMC_TO_SM = frozenset({
     '192.168.21.5':'SM203',
     '192.168.22.34':'SM204',
     '192.168.22.32':'SM207',
@@ -34,8 +34,6 @@ IPMC_TO_SM = tuple({
     '192.168.22.37':'SM209',
     '192.168.22.42':'SM211',
     '192.168.22.3':'SM212',
-
-
 })
 
 # A mapping of configuration fields -> commands to set them
