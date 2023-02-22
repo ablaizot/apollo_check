@@ -68,8 +68,21 @@ class IPMC:
     def getipmb_0_address(self):
         return self.ipmb_0_address
 
+    #for yaml config
+    def to_dict(self):
+        return {
+            'IP': self.ip,
+            'hw': self.hw,
+            'IPMB_0_address': self.ipmb_0_address,
+            'Firmware_commit': self.firmware_commit
+        }
+    
+    
+    
+
 def parse_cli():
     parser = argparse.ArgumentParser()
+    #either board number or ip needs to be provided
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('-b','--board_number', type=int, help='The serial number of the Apollo SM.',nargs='+')
     group.add_argument('-ip','--ipmc_ip',type=str,help='IP address of IPMC',nargs='+')
@@ -196,6 +209,7 @@ def validate_command_output(output, config):
     return True
 
 def validate_command_input():
+    #Makes sure the IP is known
     args = parse_cli()
     ipmc_ip = []
     board = []
@@ -218,6 +232,7 @@ def validate_command_input():
 
 
 def extract_ipmc(file_contents):
+    #makes ipmc object from information from telnet
     lines = file_contents.split("\n")
     hw = None
     ip = None
@@ -240,6 +255,7 @@ def read_logs(file_path):
     return file_contents
 
 def check_firmware(file_contents,IPMC):
+    #Checks if the telnet firmware version is the same as the one given by ipmitool
     lines = file_contents.split("\n")
     check = None
     firmware = None
