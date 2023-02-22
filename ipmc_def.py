@@ -246,7 +246,7 @@ def extract_ipmc(file_contents):
             firmware = line.split("Firmware commit:")[1].strip()
         elif "hw           =" in line:
             hw = line.split("hw           =")[1].strip()
-    return IPMC(ip, hw, address, firmware)
+    return IPMC(ip, hw, address, firmware,None)
 
 def read_logs(file_path):
     with open(file_path) as f:
