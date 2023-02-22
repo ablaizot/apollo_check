@@ -74,7 +74,7 @@ def parse_cli():
     group.add_argument('-b','--board_number', type=int, help='The serial number of the Apollo SM.',nargs='+')
     group.add_argument('-ip','--ipmc_ip',type=str,help='IP address of IPMC',nargs='+')
 
-    #parser.add_argument('-c', '--config-path', default='config/ipmc_config.yaml', help='Path to the IPMC config file.')
+    parser.add_argument('-c', '--config_path', default='config/ipmc_config.yaml', help='Path to the IPMC config file.')
 
     args = parser.parse_args()
     return args
@@ -199,6 +199,7 @@ def validate_command_input():
     args = parse_cli()
     ipmc_ip = []
     board = []
+
     if args.ipmc_ip:
         for i in args.ipmc_ip:
             if i not in IPMC_IP:
@@ -213,7 +214,7 @@ def validate_command_input():
     else:
         raise ValueError('No Argument')
 
-    return ipmc_ip, board
+    return ipmc_ip, board, args.config_path
 
 
 def extract_ipmc(file_contents):
@@ -251,3 +252,7 @@ def check_firmware(file_contents,IPMC):
     else:
         check = False
     return check
+
+def write_ipmc_to_yaml(ipmc_list, filepath):
+    with open(filepath, 'w') as f:
+        yaml.dump([ipmc.to_dict() for ipmc in ipmc_list], f)

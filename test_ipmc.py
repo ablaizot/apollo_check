@@ -6,7 +6,7 @@ import ipmc_def
 
 def main():
     
-    [ipmc_ip_list, board_list] = ipmc_def.validate_command_input()
+    [ipmc_ip_list, board_list, config_path] = ipmc_def.validate_command_input()
     
     host_list = []
 
@@ -69,6 +69,8 @@ def main():
 
 
         print(ipmc_def.check_firmware(ipmc_def.read_logs("logs_ipmc"),ipmc))
+
+    ipmc_def.write_ipmc_to_yaml(ipmc_list,config_path)
 
 
 if __name__ == '__main__':   
