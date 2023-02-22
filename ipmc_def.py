@@ -197,16 +197,15 @@ def validate_command_output(output, config):
 
 def validate_command_input():
     args = parse_cli()
-
+    ipmc_ip = []
+    board = []
     if args.ipmc_ip:
-        ipmc_ip = []
         for i in args.ipmc_ip:
             if i not in IPMC_IP:
                 raise ValueError(f'IPMC cannot be found for IP: {i}')
             ipmc_ip.append(f'{i}')
 
     elif args.board_number:
-        board = []
         for i in args.board_number:
             if i not in SM_TO_IPMC:
                 raise ValueError(f'IPMC cannot be found for Apollo: {i}')
