@@ -71,8 +71,8 @@ class IPMC:
 def parse_cli():
     parser = argparse.ArgumentParser()
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument('-b','--board_number', type=int, help='The serial number of the Apollo SM.',nargs='?')
-    group.add_argument('-ip','--ipmc_ip',type=str,help='IP address of IPMC',nargs='?')
+    group.add_argument('-b','--board_number', type=int, help='The serial number of the Apollo SM.',nargs='+')
+    group.add_argument('-ip','--ipmc_ip',type=str,help='IP address of IPMC',nargs='+')
 
     #parser.add_argument('-c', '--config-path', default='config/ipmc_config.yaml', help='Path to the IPMC config file.')
 
@@ -195,9 +195,27 @@ def validate_command_output(output, config):
     print(f"   -> OK")
     return True
 
+def validate_command_input():
+    args = parse_cli()
 
+    if args.ipmc_ip:
+        ipmc_ip = []
+        for i in args.ipmc_ip:
+            if i not in IPMC_IP:
+                raise ValueError(f'IPMC cannot be found for IP: {i}')
+            ipmc_ip.append(f'{i}')
 
-#print(subprocess.run(["/home/ablaizot/test_ipmc.sh"],shell=True))
+    elif args.board_number:
+        board = []
+        for i in args.board_number:
+            if i not in SM_TO_IPMC:
+                raise ValueError(f'IPMC cannot be found for Apollo: {i}')
+            board.append(f'SM{i}')
+    else:
+        raise ValueError('No Argument')
+
+    return ipmc_ip, board
+
 
 def extract_ipmc(file_contents):
     lines = file_contents.split("\n")
