@@ -74,7 +74,7 @@ class IPMC:
         return {
             'hw': self.hw,
             'IPMB 0 address': self.ipmb_0_address,
-            'Firmwarecommit_check': self.firmware_commit_check,
+            'Firmware commit check': self.firmware_commit_check,
             'Firmware commit': self.firmware_commit,
             'IP': self.ip,
         }
