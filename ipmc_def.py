@@ -56,11 +56,12 @@ CONFIG_TO_COMMANDS = {
 
 #define IPMC object with fields gathered from telnetting to it and ipmi tool
 class IPMC:
-    def __init__(self, ip, hw, ipmb_0_address, firmware_commit):
+    def __init__(self, ip, hw, ipmb_0_address, firmware_commit, firmware_commit_check):
         self.ip = ip
         self.hw = hw
         self.ipmb_0_address = ipmb_0_address
         self.firmware_commit = firmware_commit
+        self.firmware_commit_check = firmware_commit_check
 
     def getFirmware(self):
         return self.firmware_commit
@@ -71,14 +72,12 @@ class IPMC:
     #for yaml config
     def to_dict(self):
         return {
-            'IP': self.ip,
             'hw': self.hw,
-            'IPMB_0_address': self.ipmb_0_address,
-            'Firmware_commit': self.firmware_commit
+            'IPMB 0 address': self.ipmb_0_address,
+            'Firmwarecommit_check': self.firmware_commit_check,
+            'Firmware commit': self.firmware_commit,
+            'IP': self.ip,
         }
-    
-    
-    
 
 def parse_cli():
     parser = argparse.ArgumentParser()

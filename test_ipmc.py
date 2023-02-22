@@ -67,8 +67,8 @@ def main():
         print(subprocess.run(["ipmitool -H 192.168.10.172 -P \"\" -t " + ipmc.ipmb_0_address + " sensor >> logs_ipmc"],shell=True))
 
 
-
-        print(ipmc_def.check_firmware(ipmc_def.read_logs("logs_ipmc"),ipmc))
+        ipmc.firmware_commit_check = ipmc_def.check_firmware(ipmc_def.read_logs("logs_ipmc"),ipmc)
+        print(ipmc.firmware_commit_check)
 
     ipmc_def.write_ipmc_to_yaml(ipmc_list,config_path)
 
