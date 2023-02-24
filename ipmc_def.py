@@ -100,7 +100,7 @@ def read_config(filepath: str):
         raise FileNotFoundError(f"Could not find IPMC configuration file: {filepath}")
     
     with open(filepath, 'r') as f:
-        data = yaml.safe_load(f)
+        data = yaml.safe_load(f,Loader=yaml.FullLoader)
     
     return data
 
@@ -214,16 +214,10 @@ def validate_connections():
 
     args = parse_cli()
 
-    SM_TO_IPMC = read_config(args.config_path)
-    SM_TO_IPMC = {
-    'SM203' : '192.168.21.5',
-    'SM204' : '192.168.22.34',
-    'SM207': '192.168.22.32',
-    'SM208' : '192.168.22.41',
-    'SM209' : '192.168.22.37',
-    'SM211' : '192.168.22.42',
-    'SM212' : '192.168.22.3',
-    }
+    data = read_config(args.config_path)
+    
+    SM_TO_IPMC = data['SM_TO_IPMC']
+
     ipmc_ip_list = []
     board_list = []
 
