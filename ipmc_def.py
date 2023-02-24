@@ -214,9 +214,8 @@ def validate_connections():
 
     args = parse_cli()
 
-    data = read_config(args.config_path)
-    
-    SM_TO_IPMC = data['SM_TO_IPMC']
+    SM_TO_IPMC = read_config(args.config_path)
+
 
     ipmc_ip_list = []
     board_list = []
