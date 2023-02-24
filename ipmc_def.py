@@ -16,6 +16,7 @@ assert valid_python, "You need Python version >=3.6 to run this script!"
 PORT = 23
 
 # A mapping of Service Module serial numbers to the IPMC IP addresses
+"""
 SM_TO_IPMC = {
     'SM203' : '192.168.21.5',
     'SM204' : '192.168.22.34',
@@ -35,7 +36,7 @@ IPMC_IP = {
     '192.168.22.42',
     '192.168.22.3',
 }
-
+"""
 # A mapping of configuration fields -> commands to set them
 CONFIG_TO_COMMANDS = {
     'board' : {
@@ -86,7 +87,8 @@ def parse_cli():
     group.add_argument('-b','--board_number', type=int, help='The serial number of the Apollo SM.',nargs='+')
     group.add_argument('-ip','--ipmc_ip',type=str,help='IP address of IPMC',nargs='+')
 
-    parser.add_argument('-c', '--config_path', default='config/ipmc_config.yaml', help='Path to the IPMC config file.')
+    parser.add_argument('-c', '--config_path', default='config/ipmc_ip_config.yaml', help='Path to the IPMC IP config file.')
+    parser.add_argument('-o', '--out_path', default='config/ipmc_out.yaml', help='Path to the IPMC out file.')
 
     args = parser.parse_args()
     return args
@@ -207,15 +209,19 @@ def validate_command_output(output, config):
     print(f"   -> OK")
     return True
 
-def validate_command_input():
-    #Makes sure the IP is known
+def validate_connections():
+    #Makes sure the IP is in the config
+
     args = parse_cli()
+
+    SM_TO_IPMC = read_config(args.config_path)
+
     ipmc_ip = []
     board = []
 
     if args.ipmc_ip:
         for i in args.ipmc_ip:
-            if i not in IPMC_IP:
+            if i not in SM_TO_IPMC:
                 raise ValueError(f'IPMC cannot be found for IP: {i}')
             ipmc_ip.append(f'{i}')
 
@@ -227,7 +233,7 @@ def validate_command_input():
     else:
         raise ValueError('No Argument')
 
-    return ipmc_ip, board, args.config_path
+    return ipmc_ip, board, args.out_path
 
 
 def extract_ipmc(file_contents):
