@@ -222,7 +222,8 @@ def validate_connections():
     print(SM_TO_IPMC)
 
     if args.ipmc_ip:
-        for i in args.ipmc_ip:
+        ipmc_ips = args.ipmc_ip.split()
+        for i in ipmc_ips:
             if i not in SM_TO_IPMC:
                 raise ValueError(f'IPMC cannot be found for IP: {i}')
             ipmc_ip.append(f'{i}')
