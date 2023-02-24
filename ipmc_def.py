@@ -216,27 +216,26 @@ def validate_connections():
 
     SM_TO_IPMC = read_config(args.config_path)
 
-    ipmc_ip = []
-    board = []
+    ipmc_ip_list = []
+    board_list = []
 
     print(SM_TO_IPMC)
 
     if args.ipmc_ip:
-        ipmc_ips = args.ipmc_ip.split()
-        for i in ipmc_ips:
-            if i not in SM_TO_IPMC:
+        for i in args.ipmc_ip:
+            if i not in SM_TO_IPMC.values():
                 raise ValueError(f'IPMC cannot be found for IP: {i}')
-            ipmc_ip.append(f'{i}')
+            ipmc_ip_list.append(f'{i}')
 
     elif args.board_number:
         for i in args.board_number:
             if i not in SM_TO_IPMC:
                 raise ValueError(f'IPMC cannot be found for Apollo: {i}')
-            board.append(f'SM{i}')
+            board_list.append(f'SM{i}')
     else:
         raise ValueError('No Argument')
 
-    return ipmc_ip, board, args.out_path
+    return ipmc_ip_list, board_list, args.out_path
 
 
 def extract_ipmc(file_contents):
