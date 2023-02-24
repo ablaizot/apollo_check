@@ -215,7 +215,15 @@ def validate_connections():
     args = parse_cli()
 
     SM_TO_IPMC = read_config(args.config_path)
-
+    SM_TO_IPMC = {
+    'SM203' : '192.168.21.5',
+    'SM204' : '192.168.22.34',
+    'SM207': '192.168.22.32',
+    'SM208' : '192.168.22.41',
+    'SM209' : '192.168.22.37',
+    'SM211' : '192.168.22.42',
+    'SM212' : '192.168.22.3',
+    }
     ipmc_ip_list = []
     board_list = []
 
