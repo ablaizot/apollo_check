@@ -19,12 +19,12 @@ def main():
 
     print(SM_TO_IPMC)
 
-    key_list=list(SM_TO_IPMC.keys())
-    print(key_list)
+    ip_list=list(SM_TO_IPMC.values())
+    print(ip_list)
 
     if args.ipmc_ip:
         for i in args.ipmc_ip:
-            if i not in key_list:
+            if i not in ip_list:
                 raise ValueError(f'IPMC cannot be found for IP: {i}')
             ipmc_ip_list.append(f'{i}')
 
