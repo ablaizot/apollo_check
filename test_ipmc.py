@@ -29,7 +29,7 @@ def main():
         for i in args.board_number:
             if i not in SM_TO_IPMC:
                 raise ValueError(f'IPMC cannot be found for Apollo: {i}')
-            board_list.append(f'SM{i}')
+            board_list.append(f'{i}')
     else:
         raise ValueError('No Argument')
 
@@ -38,7 +38,7 @@ def main():
     host_list = []
 
     for i in board_list:
-        host_list.append(ipmc_def.SM_TO_IPMC[i])
+        host_list.append(SM_TO_IPMC[i])
 
     for i in ipmc_ip_list:
         host_list.append(i)

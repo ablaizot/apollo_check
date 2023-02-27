@@ -91,7 +91,7 @@ def validate_connections():
         for i in args.board_number:
             if i not in APOLLO_IP:
                 raise ValueError(f'Apollo cannot be found for: {i}')
-            host_list.append(f'SM{i}')
+            host_list.append(f'{i}')
     else:
         raise ValueError('No Argument')
 
