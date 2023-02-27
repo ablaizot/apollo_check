@@ -13,9 +13,10 @@ def main():
 
     for HOST in host_list:
         try:
+            
             # Set the ssh command with timeout of 10 seconds
-            ssh_command = "ssh -o ConnectTimeout=10 {HOST}"
-            print(subprocess.run(["ssh -o ConnectTimeout=10 {HOST}"],shell=True))
+            ssh_command = f"ssh -o ConnectTimeout=10 {HOST}"
+            print(subprocess.run([f"ssh -o ConnectTimeout=10 {HOST}"],shell=True))
             print(subprocess.run(["systemctl --failed"],shell=True))
             # Use subprocess to run the command
             #ssh_proc = subprocess.Popen(ssh_command.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
