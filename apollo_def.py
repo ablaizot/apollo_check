@@ -76,11 +76,11 @@ def write_command_and_read_output(
 
 def validate_connections():
     #Makes sure the IP is in the config
-
+    
     args = parse_cli()
 
     APOLLO_IP = read_config(args.config_path)
-   
+    print(APOLLO_IP)
     host_list = []
 
     if args.apollo_ip:
