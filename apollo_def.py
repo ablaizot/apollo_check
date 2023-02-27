@@ -82,7 +82,7 @@ def validate_connections():
     host_list = []
 
     if args.apollo_ip:
-        for i in args.APOLLO_IP:
+        for i in args.apollo_ip:
             if i not in APOLLO_IP:
                 raise ValueError(f'Apollo cannot be found for IP: {i}')
             host_list.append(f'{i}')
