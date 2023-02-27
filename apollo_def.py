@@ -33,7 +33,9 @@ def read_config(filepath: str):
         raise FileNotFoundError(f"Could not find IPMC configuration file: {filepath}")
     
     with open(filepath, 'r') as f:
-        data = yaml.safe_load(f)
+        data = yaml.load(f,Loader=yaml.FullLoader)
+    
+    return data
 
 def write_command_and_read_output(
     sock: socket.socket, 
