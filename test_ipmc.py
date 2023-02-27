@@ -6,8 +6,35 @@ import ipmc_def
 
 def main():
     
-    [ipmc_ip_list, board_list, out_path] = ipmc_def.validate_connections()
-    
+    #[ipmc_ip_list, board_list, out_path] = ipmc_def.validate_connections()
+        #Makes sure the IP is in the config
+
+    args =  ipmc_def.parse_cli()
+
+    SM_TO_IPMC =  ipmc_def.read_config(args.config_path)
+
+
+    ipmc_ip_list = []
+    board_list = []
+
+    print(SM_TO_IPMC)
+
+    if args.ipmc_ip:
+        for i in args.ipmc_ip:
+            if i not in SM_TO_IPMC:
+                raise ValueError(f'IPMC cannot be found for IP: {i}')
+            ipmc_ip_list.append(f'{i}')
+
+    elif args.board_number:
+        for i in args.board_number:
+            if i not in SM_TO_IPMC:
+                raise ValueError(f'IPMC cannot be found for Apollo: {i}')
+            board_list.append(f'SM{i}')
+    else:
+        raise ValueError('No Argument')
+
+    out_path =  args.out_path
+
     host_list = []
 
     for i in board_list:
@@ -37,8 +64,6 @@ def main():
             print(f'> Executing update commands...\n')
 
             # Execute the commands and read back data
-            
-            
             try:
                 output = ipmc_def.write_command_and_read_output(s, "info\r\n")
                 print('-> OK')
