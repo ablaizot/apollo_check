@@ -19,7 +19,7 @@ def main():
 
     print(SM_TO_IPMC)
 
-    ip_list=list(SM_TO_IPMC.values())
+    ip_list = list(SM_TO_IPMC.values())
     print(ip_list)
 
     if args.ipmc_ip:
