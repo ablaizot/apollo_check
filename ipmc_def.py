@@ -84,7 +84,7 @@ def parse_cli():
     parser = argparse.ArgumentParser()
     #either board number or ip needs to be provided
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument('-b','--board_number', type=int, help='The serial number of the Apollo SM.',nargs='+')
+    group.add_argument('-b','--board_number', type=str, help='The serial number of the Apollo SM.',nargs='+')
     group.add_argument('-ip','--ipmc_ip',type=str,help='IP address of IPMC',nargs='+')
 
     parser.add_argument('-c', '--config_path', default='config/ipmc_ip_config.yaml', help='Path to the IPMC IP config file.')
