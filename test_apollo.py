@@ -8,7 +8,7 @@ def main():
 
     [host_list, out_path] = apollo_def.validate_connections()
 
-    commands = ['ls -al', 'systemctl --failed','dmesg']
+    commands = ['ls -al', 'systemctl --failed','BUTool -a']
 
     for HOST in host_list:
         try:
