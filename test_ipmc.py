@@ -77,8 +77,7 @@ def main():
             out = ipmc_def.write_command_and_read_output(s, "eepromrd\r\n")
             print(out)
 
-        print(out)
-        print(output)
+       
         logs = out+output
 
 
@@ -88,8 +87,8 @@ def main():
         print("IPMB-0 Address:", ipmc.ipmb_0_address)
         print("Firmware Commit:", ipmc.firmware_commit)
 
-        print(subprocess.run(["ipmitool -H 192.168.10.172 -P \"\" -t " + ipmc.ipmb_0_address + " fru >> logs_ipmc"],shell=True))
-        print(subprocess.run(["ipmitool -H 192.168.10.172 -P \"\" -t " + ipmc.ipmb_0_address + " sensor >> logs_ipmc"],shell=True))
+        subprocess.run(["ipmitool -H 192.168.10.172 -P \"\" -t " + ipmc.ipmb_0_address + " fru >> logs_ipmc"],shell=True)
+        subprocess.run(["ipmitool -H 192.168.10.172 -P \"\" -t " + ipmc.ipmb_0_address + " sensor >> logs_ipmc"],shell=True)
 
 
         ipmc.firmware_commit_check = ipmc_def.check_firmware(ipmc_def.read_logs("logs_ipmc"),ipmc)
