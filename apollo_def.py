@@ -80,7 +80,7 @@ def validate_connections():
     args = parse_cli()
 
     APOLLO_IP = read_config(args.config_path)
-    print(APOLLO_IP)
+    
     ip_list = list(APOLLO_IP.values())
     host_list = []
 
