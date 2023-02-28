@@ -220,8 +220,7 @@ def validate_connections():
     ipmc_ip_list = []
     board_list = []
 
-    print(SM_TO_IPMC)
-
+    
     if args.ipmc_ip:
         for i in args.ipmc_ip:
             if i not in SM_TO_IPMC:
