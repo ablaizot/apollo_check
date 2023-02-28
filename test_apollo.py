@@ -1,7 +1,6 @@
 import socket
 import subprocess
 import time
-import ipmc_def
 import apollo_def
 
 def main():
