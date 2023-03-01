@@ -87,12 +87,19 @@ def main():
         print("IPMB-0 Address:", ipmc.ipmb_0_address)
         print("Firmware Commit:", ipmc.firmware_commit)
 
-        subprocess.run(["ipmitool -H 192.168.10.172 -P \"\" -t " + ipmc.ipmb_0_address + " fru >> logs_ipmc"],shell=True)
-        subprocess.run(["ipmitool -H 192.168.10.172 -P \"\" -t " + ipmc.ipmb_0_address + " sensor >> logs_ipmc"],shell=True)
+        #timing ipmitool
+        start = time.time()
+        
+        subprocess.run(["ipmitool -H 192.168.10.172 -P \"\" -t " + ipmc.ipmb_0_address + " fru > logs_ipmc"],shell=True)
 
+        end = time.time()
+        ipmc.ipmi_time = (end-start)*10**3
+        print("ipmitool fru time:",ipmc.ipmi_time)
+
+        subprocess.run(["ipmitool -H 192.168.10.172 -P \"\" -t " + ipmc.ipmb_0_address + " sensor > logs_ipmc"],shell=True)
 
         ipmc.firmware_commit_check = ipmc_def.check_firmware(ipmc_def.read_logs("logs_ipmc"),ipmc)
-        print(ipmc.firmware_commit_check)
+        print("Firmware Check:",ipmc.firmware_commit_check)
 
     ipmc_def.write_ipmc_to_yaml(ipmc_list,out_path)
 

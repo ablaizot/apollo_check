@@ -57,12 +57,13 @@ CONFIG_TO_COMMANDS = {
 
 #define IPMC object with fields gathered from telnetting to it and ipmi tool
 class IPMC:
-    def __init__(self, ip, hw, ipmb_0_address, firmware_commit, firmware_commit_check):
+    def __init__(self, ip, hw, ipmb_0_address, firmware_commit, firmware_commit_check,ipmi_time):
         self.ip = ip
         self.hw = hw
         self.ipmb_0_address = ipmb_0_address
         self.firmware_commit = firmware_commit
         self.firmware_commit_check = firmware_commit_check
+        self.ipmi_time = ipmi_time
 
     def getFirmware(self):
         return self.firmware_commit
@@ -74,6 +75,7 @@ class IPMC:
     def to_dict(self):
         return {
             'hw': self.hw,
+            'Ipmi Time':self.ipmi_time,
             'IPMB 0 address': self.ipmb_0_address,
             'Firmware commit check': self.firmware_commit_check,
             'Firmware commit': self.firmware_commit,
@@ -254,7 +256,7 @@ def extract_ipmc(file_contents):
             firmware = line.split("Firmware commit:")[1].strip()
         elif "hw           =" in line:
             hw = line.split("hw           =")[1].strip()
-    return IPMC(ip, hw, address, firmware,None)
+    return IPMC(ip, hw, address, firmware,None,None)
 
 def read_logs(file_path):
     with open(file_path) as f:
