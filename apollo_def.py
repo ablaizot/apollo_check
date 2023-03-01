@@ -29,11 +29,12 @@ def parse_cli():
 
 def parse_out(cmd_output,field):
     out = None
-    lines = cmd_output.split("\n")
+    if cmd_output != None:
+        lines = cmd_output.split("\n")
 
-    for line in lines:
-        if field in line:
-            out = line.split(field)[1].strip()
+        for line in lines:
+            if field in line:
+                out = line.split(field)[1].strip()
 
     return out
 
