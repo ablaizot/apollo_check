@@ -14,6 +14,7 @@ def main():
     #Connects to each apollo and sends set of commands
     for HOST in host_list:
         out = None
+        error = None
         try:
 
             ssh_cmd = ['ssh', f'cms@{HOST}']
@@ -41,6 +42,7 @@ def main():
         except Exception as e:
             print("An error occurred:", e)
 
+        print(error)
         apollo = apollo_def.extract_apollo(HOST,out)
         apollo_list.append(apollo)
         print("IP:", apollo.ip)
