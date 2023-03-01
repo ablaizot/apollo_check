@@ -11,11 +11,11 @@ def main():
     commands = ['systemctl --failed','BUTool.exe -a','readconvert SLAVE_I2C.S8.IPMC_IP','exit']
 
     apollo_list = []
-    
+
     #Connects to each apollo and sends set of commands
     for HOST in host_list:
-        out = None
-        error = None
+        out = ""
+        error = ""
         try:
 
             ssh_cmd = ['ssh', f'cms@{HOST}']
