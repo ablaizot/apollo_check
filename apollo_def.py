@@ -78,7 +78,9 @@ def validate_connections():
 #Constructing apollo object from ssh output
 def extract_apollo(host,cmd_output):
     ip = host
-    name, ipmc, firmware_commit  = None
+    name = None
+    ipmc = None
+    firmware_commit  = None
 
     ipmc = parse_out(cmd_output,"SLAVE_I2C.S8.IPMC_IP:")
 
