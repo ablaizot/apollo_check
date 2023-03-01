@@ -11,6 +11,7 @@ def main():
     commands = ['systemctl --failed','BUTool.exe -a','readconvert SLAVE_I2C.S8.IPMC_IP','exit']
 
     apollo_list = []
+    
     #Connects to each apollo and sends set of commands
     for HOST in host_list:
         out = None
@@ -26,13 +27,16 @@ def main():
                 ssh_session.stdin.write(command.encode())
                 ssh_session.stdin.write(b'\n')
             ssh_session.stdin.close()
-
+            
             for line in ssh_session.stdout:
-                out = line.decode().rstrip()
-                print(out)
+                l = line.decode().rstrip()
+                print(l)
+                out = out + l
             for line in ssh_session.stderr:
-                error = line.decode().rstrip()
-                print(error)
+                err = line.decode().rstrip()
+                print(err)
+                error = error + err
+
 
             ssh_session.wait()
 
@@ -42,7 +46,7 @@ def main():
         except Exception as e:
             print("An error occurred:", e)
 
-        print(error)
+        
         apollo = apollo_def.extract_apollo(HOST,out)
         apollo_list.append(apollo)
         print("IP:", apollo.ip)
