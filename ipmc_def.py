@@ -15,45 +15,6 @@ assert valid_python, "You need Python version >=3.6 to run this script!"
 # The port for the telnet service on the IPMC
 PORT = 23
 
-# A mapping of Service Module serial numbers to the IPMC IP addresses
-"""
-SM_TO_IPMC = {
-    'SM203' : '192.168.21.5',
-    'SM204' : '192.168.22.34',
-    'SM207': '192.168.22.32',
-    'SM208' : '192.168.22.41',
-    'SM209' : '192.168.22.37',
-    'SM211' : '192.168.22.42',
-    'SM212' : '192.168.22.3',
-}
-
-IPMC_IP = {
-    '192.168.21.5',
-    '192.168.22.34',
-    '192.168.22.32',
-    '192.168.22.41',
-    '192.168.22.37',
-    '192.168.22.42',
-    '192.168.22.3',
-}
-"""
-# A mapping of configuration fields -> commands to set them
-CONFIG_TO_COMMANDS = {
-    'board' : {
-        'serial' : 'idwr',
-        'rev'    : 'revwr',
-    },
-    'eeprom' : {
-        'version' : 'verwr',
-    },
-    'zynq' : {
-        'bootmode' : 'bootmode',
-    },
-    'mac' : {
-        'eth0' : 'ethmacwr 0',
-        'eth1' : 'ethmacwr 1',
-    },
-}
 
 #define IPMC object with fields gathered from telnetting to it and ipmi tool
 class IPMC:
@@ -106,32 +67,6 @@ def read_config(filepath: str):
     
     return data
 
-
-def validate_config(config):
-    """Make sure that all the required keys are in place for the configuration."""
-    for key, item in CONFIG_TO_COMMANDS.items():
-        assert key in config, f"Key cannot be found: {key}"
-
-        for subkey in item.keys():
-            assert subkey in config[key], f"Sub-key cannot be found: {subkey} (under {key})"
-
-
-def get_commands(config):
-    """
-    Given the configuration of IPMC fields, generate the set of commands necessary to set them in EEPROM.
-    """
-    commands = []
-
-    for key, item in CONFIG_TO_COMMANDS.items():
-        for subkey, commandbase in item.items():
-            # Read the value from the config and figure out the command
-            # Some minor pre-processing for MAC address values 
-            value = str(config[key][subkey]).replace(':', ' ')
-            commands.append(f"{commandbase} {value}\r\n")
-
-    return commands
-
-
 def write_command_and_read_output(
     sock: socket.socket, 
     command: str,
@@ -168,48 +103,6 @@ def write_command_and_read_output(
         _ = sock.recv(1)
 
     return data.decode('ascii')
-
-
-def validate_command_output(output, config):
-    """
-    Given the command output and the configuration, figure out if the command succeeded.
-    """
-    # Construct an expected "eepromrd" command output
-    expected = {
-        "prom version" : f'0x{config["eeprom"]["version"]:02X}',
-        "bootmode"     : f'0x{config["zynq"]["bootmode"]:02X}',
-        "hw"           : f'rev{config["board"]["rev"]} #{config["board"]["serial"]}',
-        "eth0_mac"     : config["mac"]["eth0"],
-        "eth1_mac"     : config["mac"]["eth1"],
-    }
-
-    print(">> Examining EEPROM output")
-
-    # Extract the value mapping from the eepromrd output
-    tokens = output.split('\n')
-    mapping = {}
-
-    for token in tokens:
-        if '=' not in token:
-            continue
-        split_items = token.split('=')
-        if split_items[0].strip() in expected:
-            mapping[split_items[0].strip()] = split_items[-1].strip()
-
-    # Compare the expected and recieved outputs
-    for key in expected.keys():
-        # Expected key not found in output
-        if key not in mapping:
-            print(f"   -> Key not found: {key}")
-            return False
-
-        if mapping[key] != expected[key]:
-            print(f"   -> Key value does not match: {key}")
-            return False
-    
-    # It's all good if we arrived here
-    print(f"   -> OK")
-    return True
 
 def validate_connections():
     #Makes sure the IP is in the config

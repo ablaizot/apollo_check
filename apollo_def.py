@@ -3,7 +3,7 @@ import os
 import socket
 import yaml
 
-class apollo:
+class APOLLO:
     def __init__(self, ip, name, ipmc,firmware_commit):
         self.ip = ip    
         self.name = name
@@ -26,6 +26,17 @@ def parse_cli():
 
     args = parser.parse_args()
     return args
+
+def parse_out(cmd_output,field):
+    out = None
+    lines = cmd_output.split("\n")
+
+    for line in lines:
+        if field in line:
+            out = line.split(field)[1].strip()
+
+    return out
+
 
 def read_config(filepath: str):
     """Reads the YAML configuration file from the given file path."""
@@ -63,3 +74,11 @@ def validate_connections():
 
     return host_list, args.out_path
 
+#Constructing apollo object from ssh output
+def extract_apollo(host,cmd_output):
+    ip = host
+    name, ipmc, firmware_commit  = None
+
+    ipmc = parse_out(cmd_output,"SLAVE_I2C.S8.IPMC_IP:")
+
+    return APOLLO(ip,name,ipmc,firmware_commit)

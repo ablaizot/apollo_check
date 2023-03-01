@@ -10,37 +10,42 @@ def main():
 
     commands = ['systemctl --failed','BUTool.exe -a','readconvert SLAVE_I2C.S8.IPMC_IP','exit']
 
+    apollo_list = []
+    #Connects to each apollo and sends set of commands
     for HOST in host_list:
         try:
             
-            # Set the ssh command with timeout of 10 seconds
             ssh_cmd = ['ssh', f'cms@{HOST}']
             
-            #print(subprocess.run([ssh_command],shell=True))
-            # Use subprocess to run the command
-            #ssh_proc = subprocess.Popen(ssh_command.split(), stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             ssh_session = subprocess.Popen(ssh_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+            #Writing command by command
             for command in commands:
                 ssh_session.stdin.write(command.encode())
                 ssh_session.stdin.write(b'\n')
             ssh_session.stdin.close()
+
             for line in ssh_session.stdout:
-                print(line.decode().rstrip())
+                out = line.decode().rstrip()
+                print(out)
             for line in ssh_session.stderr:
-                print(line.decode().rstrip())
+                error = line.decode().rstrip()
+                print(error)
+
             ssh_session.wait()
-            # Wait for the command to finish or timeout
-            #stdout, stderr = ssh_proc.communicate(timeout=10)
-            
-            # Print the output
-            #print(stdout.decode())
-            #print(stderr.decode())
+
 
         except subprocess.TimeoutExpired:
             print("SSH connection timed out.")
         except Exception as e:
             print("An error occurred:", e)
 
+        apollo = apollo_def.extract_apollo(HOST,out)
+        apollo_list.append(apollo)
+        print("IP:", apollo.ip)
+        print("Name:", apollo.name)
+        print("IPMC:", apollo.ipmc)
+        print("Firmware Commit:", apollo.firmware_commit)
 
 if __name__ == '__main__':   
     main()

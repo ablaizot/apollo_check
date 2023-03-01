@@ -98,6 +98,7 @@ def main():
 
         subprocess.run(["ipmitool -H 192.168.10.172 -P \"\" -t " + ipmc.ipmb_0_address + " sensor >> logs_ipmc"],shell=True)
 
+        #checking ipmitool firmware with what telnetting gathered
         ipmc.firmware_commit_check = ipmc_def.check_firmware(ipmc_def.read_logs("logs_ipmc"),ipmc)
         print("Firmware Check:",ipmc.firmware_commit_check)
     
