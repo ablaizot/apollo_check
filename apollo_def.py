@@ -31,7 +31,7 @@ def parse_out(cmd_output,field):
     out = None
     if cmd_output != None:
         lines = cmd_output.split("\n")
-        
+        print("lines",lines)
         for line in lines:
             print("seeking\n")
             print(line)
