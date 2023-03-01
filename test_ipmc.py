@@ -80,7 +80,7 @@ def main():
        
         logs = out+output
 
-
+        #Extracting information and making ipmc object
         ipmc = ipmc_def.extract_ipmc(logs)
         ipmc_list.append(ipmc)
         print("IP:", ipmc.ip)
@@ -94,13 +94,14 @@ def main():
 
         end = time.time()
         ipmc.ipmi_time = (end-start)*10**3
-        print("ipmitool fru time:",ipmc.ipmi_time,"ms")
+        print(f"ipmitool fru time: {ipmc.ipmi_time:.03f}ms")
 
         subprocess.run(["ipmitool -H 192.168.10.172 -P \"\" -t " + ipmc.ipmb_0_address + " sensor >> logs_ipmc"],shell=True)
 
         ipmc.firmware_commit_check = ipmc_def.check_firmware(ipmc_def.read_logs("logs_ipmc"),ipmc)
         print("Firmware Check:",ipmc.firmware_commit_check)
-
+    
+    #outputting to yaml file
     ipmc_def.write_ipmc_to_yaml(ipmc_list,out_path)
 
 
