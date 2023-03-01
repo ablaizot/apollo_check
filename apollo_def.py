@@ -33,7 +33,9 @@ def parse_out(cmd_output,field):
         lines = cmd_output.split("\n")
 
         for line in lines:
+            print("seeking\n")
             if field in line:
+                print("Found\n")
                 out = line.split(field)[1].strip()
 
     return out
