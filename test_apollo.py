@@ -13,8 +13,9 @@ def main():
     apollo_list = []
     #Connects to each apollo and sends set of commands
     for HOST in host_list:
+        out = None
         try:
-            
+
             ssh_cmd = ['ssh', f'cms@{HOST}']
             
             ssh_session = subprocess.Popen(ssh_cmd, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
