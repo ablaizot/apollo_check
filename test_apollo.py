@@ -8,7 +8,7 @@ def main():
 
     [host_list, out_path] = apollo_def.validate_connections()
 
-    commands = ['systemctl --failed','BUTool.exe -a','readconvert SLAVE_I2C.S8.IPMC_IP','exit']
+    commands = ['BUTool.exe -a','readconvert SLAVE_I2C.S8.IPMC_IP','exit']
 
     apollo_list = []
 
