@@ -82,6 +82,6 @@ def extract_apollo(host,cmd_output):
     ipmc = None
     firmware_commit  = None
 
-    ipmc = parse_out(cmd_output,"SLAVE_I2C.S8.IPMC_IP:")
+    ipmc = parse_out(cmd_output,"                              SLAVE_I2C.S8.IPMC_IP:")
 
     return APOLLO(ip,name,ipmc,firmware_commit)
