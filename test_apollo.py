@@ -2,6 +2,7 @@ import socket
 import subprocess
 import time
 import apollo_def
+import ipmc_def
 
 def main():
    
@@ -52,6 +53,7 @@ def main():
         print("IP:", apollo.ip)
         print("Name:", apollo.name)
         print("IPMC:", apollo.ipmc)
+        #can be object
         print("Firmware Commit:", apollo.firmware_commit)
 
 if __name__ == '__main__':   
